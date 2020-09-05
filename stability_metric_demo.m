@@ -1,7 +1,7 @@
 clear all; close all;
 
-% (0) enter directory path containing files in 'dirloc'
-dirloc = '~/Desktop/williams_mcnamara_natureReports/github/use'; % change to your folder location here
+% (0) change path
+dirloc = '~/file/directory'; 
 cd(dirloc)
 
 % (1) set up Lorenz model params to generate time series
