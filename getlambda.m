@@ -10,9 +10,9 @@ DB_store = zeros(length(L)+1,npt); % store backward separation distances
 
 % flag points on test attractor that are okay to use 
 % i.e. must have length(L) to calculate distance spreading 
-flag = zeros(N,1);
+flag = zeros(length(I),1);
 ind=1;
-for ii=1:N 
+for ii=1:length(I) 
     if I(ii)+length(L)<size(embd_test,1) & I(ii)-length(L)>0 &...
             xn(I(ii))+length(L)<size(embd_lib,1) & xn(I(ii))-length(L)>0
         if ind<=npt
@@ -25,7 +25,7 @@ end
 
 
 ind = 1;
-for k=1:N % march through test attractor and measure separation distance forwards and backwards
+for k=1:length(I) % march through test attractor and measure separation distance forwards and backwards
     if flag(k)==1
         dsqF=(embd_test(k:k+length(L),:)-embd_lib(xn(k):xn(k)+length(L),:)).^2; % square of distances forward and backward from point k (along each dimension)    
         dsqB=(embd_test(k:-1:k-length(L),:)-embd_lib(xn(k):-1:xn(k)-length(L),:)).^2; 
@@ -35,6 +35,14 @@ for k=1:N % march through test attractor and measure separation distance forward
         DB_store(:,ind)=DB/DB(1); 
         ind=ind+1;
     end
+end
+
+% if npt points could not be queried, then remove zeros from DB_store and DF_store, 
+f_zero = find(DB_store(1,:)==0);
+if numel(f_zero)>0
+    f_zero=f_zero(1);
+    DB_store(:,f_zero:end)=[];
+    DF_store(:,f_zero:end)=[];
 end
 
 % get lambda^+ and lambda^- as in Equation 2 in manuscript
